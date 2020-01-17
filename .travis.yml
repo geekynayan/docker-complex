@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t tester -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true tester npm test
+
+after_success:
+  - docker build -t geekynayan/multi-client ./client
+  - docker build -t geekynayan/multi-server ./server
+  - docker build -t geekynayan/multi-nginx ./nginx
+  - docker build -t geekynayan/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push geekynayan/multi-client
+  - docker push geekynayan/multi-server
+  - docker push geekynayan/multi-nginx
+  - docker push geekynayan/multi-worker
+
+
