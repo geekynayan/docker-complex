@@ -19,4 +19,16 @@ after_success:
   - docker push geekynayan/multi-nginx
   - docker push geekynayan/multi-worker
 
+deploy:
+  provider: elasticbeanstalk
+  region: ap-south-1
+  app: MultiDockerEBS
+  env: Multidockerebs-env
+  bucket_name: elasticbeanstalk-ap-south-1-608531295111
+  bucket_path: docker_multi
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
+
 
